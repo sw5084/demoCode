@@ -1,0 +1,8 @@
+CREATE TABLE `userinfo` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL,
+	`password` VARCHAR(100) NOT NULL,
+	`passhash` VARCHAR(50) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `username` (`username`)
+);

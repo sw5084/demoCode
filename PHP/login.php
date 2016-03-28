@@ -10,6 +10,7 @@ $default = "testuser@example.com";
 
 function loginForm ($default){
 	// return form body
+	// some JQuery ajax and css
 	$a = <<< HTML
 	<head>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js">
@@ -98,6 +99,7 @@ function validate($username, $password){
 	$stmt->execute();
 	$stmt->bind_result($id, $uname, $upass, $salt);
 	$stmt->fetch();
+	// since username is unique, this SQL only returns one line, so just one fetch is enough.
 	$stmt->close();
 	$conn->close();
 	if ($uname){
@@ -118,26 +120,32 @@ function validate($username, $password){
 }
 
 if (!$hideform){
+	// default page
 	echo loginForm($default);
 	
 	echo endBody();
 } else {
+	// ajax response
 	if(isset($_POST['username']) && isset($_POST['password'])){
 		if (($_POST['username']) && (($_POST['password']))){
 			if (validate($_POST['username'], $_POST['password']) == 1){
+				// password matches username
 				$json['status'] = 1;
 				$json['message'] = "Login Successful!";
 				echo json_encode($json);
 			} elseif (validate($_POST['username'], $_POST['password']) == 2) {
+				// wrong password for the username
 				$json['status'] = 0;
 				$json['message'] = "Wrong Username or Password. Please try again.";
 				echo json_encode($json);
 			} else {
+				// username does not exist
 				$json['status'] = 0;
 				$json['message'] = "Wrong Username or Password. Please try again.";
 				echo json_encode($json);
 			}
 		} else {
+			// did not enter username and/or password
 			$json['status'] = 0;
 			$json['message'] = "Please enter Username and Password.";
 			echo json_encode($json);
